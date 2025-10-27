@@ -29,8 +29,8 @@ jobs:
       - name: Build executables
         run: |
           mkdir -p release-artifacts
-          pyinstaller --onefile src/ui.py --name app-windows
-          pyinstaller --onefile src/ui.py --name app-macos
+          pyinstaller --onefile main.py --name app-windows
+          pyinstaller --onefile main.py --name app-macos
           cp dist/app-windows ./release-artifacts/
           cp dist/app-macos ./release-artifacts/
 
