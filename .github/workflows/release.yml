@@ -27,12 +27,12 @@ jobs:
           pip install pyinstaller requests beautifulsoup4 lxml openpyxl
 
       - name: Build Windows executable
-        run: |
+        run: >
           mkdir release-artifacts
-          pyinstaller --onefile --windowed main.py --name "ParserApp" \
-                      --hidden-import=requests \
-                      --hidden-import=bs4 \
-                      --hidden-import=openpyxl
+          pyinstaller --onefile --windowed main.py --name "ParserApp"
+          --hidden-import=requests
+          --hidden-import=bs4
+          --hidden-import=openpyxl
           copy dist\ParserApp.exe release-artifacts\ParserApp-Windows.exe
 
       - name: Upload artifact
