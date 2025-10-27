@@ -72,7 +72,8 @@ jobs:
 #          path: release-artifacts/*
 
   release:
-    needs: [build-windows, build-macos]
+#    needs: [build-windows, build-macos]
+    needs: [build-windows]
     runs-on: ubuntu-latest
 
     steps:
