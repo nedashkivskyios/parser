@@ -24,12 +24,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyinstaller
+          pip install pyinstaller requests beautifulsoup4 lxml openpyxl
 
       - name: Build Windows executable
         run: |
           mkdir release-artifacts
-          pyinstaller --onefile --windowed main.py --name "ParserApp"
+          pyinstaller --onefile --windowed main.py --name "ParserApp" \
+                      --hidden-import=requests \
+                      --hidden-import=bs4 \
+                      --hidden-import=openpyxl
           copy dist\ParserApp.exe release-artifacts\ParserApp-Windows.exe
 
       - name: Upload artifact
@@ -38,35 +41,35 @@ jobs:
           name: windows-build
           path: release-artifacts/*
 
-  build-macos:
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyinstaller
-
-      - name: Build macOS .app
-        run: |
-          mkdir release-artifacts
-          pyinstaller --onefile --windowed main.py --name "ParserApp"
-          # Перемістимо .app у зручне місце
-          cp -R "dist/ParserApp.app" "release-artifacts/ParserApp-macOS.app"
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-build
-          path: release-artifacts/*
+#  build-macos:
+#    runs-on: macos-latest
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Python
+#        uses: actions/setup-python@v5
+#        with:
+#          python-version: "3.11"
+#
+#      - name: Install dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install pyinstaller
+#
+#      - name: Build macOS .app
+#        run: |
+#          mkdir release-artifacts
+#          pyinstaller --onefile --windowed main.py --name "ParserApp"
+#          # Перемістимо .app у зручне місце
+#          cp -R "dist/ParserApp.app" "release-artifacts/ParserApp-macOS.app"
+#
+#      - name: Upload artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: macos-build
+#          path: release-artifacts/*
 
   release:
     needs: [build-windows, build-macos]
